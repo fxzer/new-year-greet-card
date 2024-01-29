@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>龙年贺卡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card {
+            position: relative;
+            perspective: 800px;
+
+        }
+
+        @media screen and (min-width: 1024px) {
+            .card {
+                width: 800px;
+                height: 400px;
+                margin: auto 0;
+            }
+        }
+
+        /* 手机端 */
+        @media screen and (max-width: 1023.99px) {
+            body {
+                transform: rotate(90deg) translateY(-100%);
+                transform-origin: left top;
+                width: 100vh;
+                height: 100vw;
+            }
+
+            body.is-safari {
+                padding-right: 20%;
+            }
+
+            .card {
+                width: 86vh;
+                height: 80vw;
+            }
+        }
+
+        .front,
+        .back {
+            position: absolute;
+            overflow: hidden;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .front img,
+        .back img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .back {
+            position: relative;
+            transform: rotateY(180deg);
+        }
+
+        .card.flip .front {
+            transform: rotateY(-180deg);
+        }
+
+        .card.flip .back {
+            transform: rotateY(0deg);
+        }
+
+        .back #name {
+            position: absolute;
+            top: 26%;
+            left: 42.5%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: rgb(255, 29, 29);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="front">
+            <img src="./assets/1.jpg" srcset="">
+        </div>
+        <div class="back">
+            <img src="./assets/2.png" class="border">
+            <span id="name"></span>
+        </div>
+    </div>
+</body>
+
+<script>
+    window.onload = function () {
+        // 读取json文件, 拿到里面的数据
+        const body = document.querySelector('body');
+        const card = document.querySelector('.card');
+        const long = document.getElementById('logo');
+        const greetings = document.querySelector('.greetings');
+        const cname = document.querySelector('#name');
+        const { n = '张三' } = getQueryParams(window.location.href);
+
+        cname.innerHTML = n
+        body.addEventListener('click', () => card.classList.toggle('flip'))
+
+        // 点击龙切换祝福语
+        function getQueryParams(url) {
+            const urlObj = new URL(url);
+            const queryParams = new URLSearchParams(urlObj.search);
+
+            return Object.fromEntries(queryParams.entries());
+        }
+
+        // 判断当前浏览器类型是不是 safari
+        function isSafari() {
+            const ua = navigator.userAgent.toLowerCase();
+            return ua.indexOf('safari') > -1 && ua.indexOf('chrome') < 0;
+        }
+
+        // 判断是否手机端
+        function isMobile() {
+            const ua = navigator.userAgent.toLowerCase();
+            return ua.indexOf('mobile') > -1;
+        }
+
+        const isMobileSafari = isSafari() && isMobile();
+        if (isMobileSafari) {
+            document.body.classList.add('is-safari');
+        }
+    }
+
+</script>
+
+</html>
