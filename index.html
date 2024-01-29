@@ -117,8 +117,6 @@
         // 读取json文件, 拿到里面的数据
         const body = document.querySelector('body');
         const card = document.querySelector('.card');
-        const long = document.getElementById('logo');
-        const greetings = document.querySelector('.greetings');
         const cname = document.querySelector('#name');
         const { n = '张三' } = getQueryParams(window.location.href);
 
@@ -129,25 +127,19 @@
         function getQueryParams(url) {
             const urlObj = new URL(url);
             const queryParams = new URLSearchParams(urlObj.search);
-
             return Object.fromEntries(queryParams.entries());
         }
 
-        // 判断当前浏览器类型是不是 safari
-        function isSafari() {
+        // 判断当前浏览器类型是不是 手机端 safari
+        function isMobileSafari() {
             const ua = navigator.userAgent.toLowerCase();
-            return ua.indexOf('safari') > -1 && ua.indexOf('chrome') < 0;
+           return ['iphone','safari','mobile'].every(item => ua.includes(item) )
         }
 
-        // 判断是否手机端
-        function isMobile() {
-            const ua = navigator.userAgent.toLowerCase();
-            return ua.indexOf('mobile') > -1;
-        }
-
-        const isMobileSafari = isSafari() && isMobile();
-        if (isMobileSafari) {
+        if (isMobileSafari()) {
             document.body.classList.add('is-safari');
+        }else{
+            document.body.classList.remove('is-safari');
         }
     }
 
